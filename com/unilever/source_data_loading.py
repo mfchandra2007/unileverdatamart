@@ -32,7 +32,7 @@ if __name__ == '__main__':
     app_secret = yaml.load(secret, Loader=yaml.FullLoader)
 
     src_list = app_conf["source_data_list"]
-
+    print("app_secret:" + app_secret)
     for src in src_list:
         src_conf = app_conf[src]
         if src == "SB":
@@ -45,6 +45,7 @@ if __name__ == '__main__':
                            "user": app_secret["mysql_conf"]["username"],
                            "password": app_secret["mysql_conf"]["password"]
                            }
+            print("\n jdbc_params" + jdbc_params)
         txn_df = spark \
             .read.format("jdbc") \
             .option("driver", "com.mysql.cj.jdbc.Driver") \
