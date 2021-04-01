@@ -46,22 +46,22 @@ if __name__ == '__main__':
                            "password": app_secret["mysql_conf"]["password"]
                            }
             print("\n jdbc_params" + jdbc_params["url"])
-        txn_df = spark \
-            .read.format("jdbc") \
-            .option("driver", "com.mysql.cj.jdbc.Driver") \
-            .option(**jdbc_params) \
-            .load() \
-            .withColumn("ins_dt", functions.current_date())
+            txn_df = spark \
+                .read.format("jdbc") \
+                .option("driver", "com.mysql.cj.jdbc.Driver") \
+                .option(**jdbc_params) \
+                .load() \
+                .withColumn("ins_dt", functions.current_date())
 
-        txn_df.show(5)
-        txn_df.write \
-            .mode("overwrite") \
-            .partitionBy("INS_DT") \
-            .option("header","true") \
-            .option("delimiter", "~") \
-            .csv("s3a://" + src_conf["s3_conf"]["s3_bucket"] + "/staging/SB")
+            txn_df.show(5)
+            txn_df.write \
+                .mode("overwrite") \
+                .partitionBy("INS_DT") \
+                .option("header","true") \
+                .option("delimiter", "~") \
+                .csv("s3a://" + src_conf["s3_conf"]["s3_bucket"] + "/staging/SB")
 
-        print("\n Write SB data in S3 << ")
+            print("\n Write SB data in S3 << ")
 
         # spark-submit --packages "mysql:mysql-connector-java:8.0.15,org.apache.hadoop:hadoop-aws:2.7.4,com.springml:spark-sftp_2.11:1.1.1" com/unilever/source_data_loading.py
 
