@@ -1,0 +1,27 @@
+source_data_list:
+  - SB
+SB:
+  mysql_conf:
+    dbtable: testdb.TransactionSync
+    partition_column: App_Transaction_Id
+
+OL:
+  sftp_conf:
+    filetype: csv
+    delimiter: "|"
+    directory: /home/ubuntu/data
+    filename: receipts_delta_GBR_14_10_2017.csv
+
+s3_conf:
+  s3_bucket: chandraaws
+  staging_dir : staging
+
+mongodb_config:
+  database: school
+  collection: students
+
+redshift_conf:
+  filetype: csv
+  delimiter: |
+  dbtable: PUBLIC.TXN_FCT
+  query: SELECT txn_id, create_time, amount, cust_id from PUBLIC.TXN_FCT
