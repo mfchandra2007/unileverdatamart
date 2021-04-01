@@ -37,19 +37,19 @@ if __name__ == '__main__':
         src_conf = app_conf[src]
         if src == "SB":
             jdbc_params = {"url": ut.get_mysql_jdbc_url(app_secret),
-                           "lowerBound": "1",
-                           "upperBound": "100",
-                           "dbtable": src_conf["mysql_conf"]["dbtable"],
-                           "numPartitions": "2",
-                           "partitionColumn": src_conf["mysql_conf"]["partition_column"],
-                           "user": app_secret["mysql_conf"]["username"],
-                           "password": app_secret["mysql_conf"]["password"]
-                           }
-            print("\n jdbc_params" + jdbc_params["url"])
+                          "lowerBound": "1",
+                          "upperBound": "100",
+                          "dbtable": src_conf["mysql_conf"]["dbtable"],
+                          "numPartitions": "2",
+                          "partitionColumn": src_conf["mysql_conf"]["partition_column"],
+                          "user": app_secret["mysql_conf"]["username"],
+                          "password": app_secret["mysql_conf"]["password"]
+                          }
+            print("\n jdbc_params :" + jdbc_params["url"])
             txn_df = spark \
                 .read.format("jdbc") \
                 .option("driver", "com.mysql.cj.jdbc.Driver") \
-                .option(**jdbc_params) \
+                .options(**jdbc_params) \
                 .load() \
                 .withColumn("ins_dt", functions.current_date())
 
