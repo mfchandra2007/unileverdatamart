@@ -44,8 +44,7 @@ if __name__ == '__main__':
                            "partitionColumn": src_conf["mysql_conf"]["partition_column"],
                            "user": app_secret["mysql_conf"]["username"],
                            "password": app_secret["mysql_conf"]["password"]
-                          }
-
+                           }
         txn_df = spark \
             .read.format("jdbc") \
             .option("driver", "com.mysql.cj.jdbc.Driver") \
