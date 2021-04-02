@@ -89,9 +89,9 @@ if __name__ == '__main__':
             print("\nReading OL data from Aws S3 >>")
             txn_df3 = spark.read.option("header","true") \
                       .option("delimiter","|") \
+                      .csv("s3a://" + src_conf["s3_source_conf"]["s3_bucket"] + "/KC_Extract_1_20171009.csv") \
                       .withColumn("ins_dt", functions.current_date()) \
-                      .csv("s3a://" + src_conf["s3_source_conf"]["s3_bucket"] + "/KC_Extract_1_20171009.csv")
-                        #                src_conf["s3_source_conf"]["sourcefile"]) \
+                #                src_conf["s3_source_conf"]["sourcefile"]) \
             txn_df3.show(5)
 
             txn_df3.write \
