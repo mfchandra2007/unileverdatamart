@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
         elif src == "CP":
             print("\nReading OL data from Aws S3 >>")
-            txn_df3 = spark.read.csv("S3a://" + src_conf["s3_source_conf"]["s3_bucket"] + "/" +
+            txn_df3 = spark.read.csv("s3a://" + src_conf["s3_source_conf"]["s3_bucket"] + "/" +
                                       src_conf["s3_source_conf"]["sourcefile"]) \
                       .option("header","true") \
                       .option("delimiter","|") \
