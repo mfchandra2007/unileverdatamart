@@ -87,12 +87,11 @@ if __name__ == '__main__':
 
         elif src == "CP":
             print("\nReading OL data from Aws S3 >>")
-            txn_df3 = spark.read.csv("s3a://" + src_conf["s3_source_conf"]["s3_bucket"] + "/" +
-                                      src_conf["s3_source_conf"]["sourcefile"]) \
+            txn_df3 = spark.read.csv("s3a://" + src_conf["s3_source_conf"]["s3_bucket"] + "/KC_Extract_1_20171009.csv")\
                       .option("header","true") \
                       .option("delimiter","|") \
                       .withColumn("ins_dt", functions.current_date())
-
+            #                src_conf["s3_source_conf"]["sourcefile"]) \
             txn_df3.show(5)
 
             txn_df3.write \
