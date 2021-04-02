@@ -85,14 +85,24 @@ if __name__ == '__main__':
 
             print("\nWriting OL data to S3 <<")
 
+        elif src == "CP":
+            print("\nReading OL data from Aws S3 >>")
+            txn_df3 = spark.read.csv("S3a://" + src_conf["s3_source_conf"]["s3_bucket"] + "/" +
+                                      src_conf["s3_source_conf"]["sourcefile"]) \
+                      .option("header","true") \
+                      .option("delimiter","|") \
+                      .withColumn("ins_dt", functions.current_date())
 
+            txn_df3.show(5)
 
+            txn_df3.write \
+                    .mode("overwrite") \
+                    .partitionBy("INS_DT") \
+                    .option("header","true") \
+                    .option("delimiter", "~") \
+                    .csv("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/CP")
 
-
-
-
-
-
+            print("\n Writing CP data to S3 <<")
 
         # spark-submit --packages "mysql:mysql-connector-java:8.0.15,org.apache.hadoop:hadoop-aws:2.7.4,com.springml:spark-sftp_2.11:1.1.1" com/unilever/source_data_loading.py
         # spark-submit --packages "mysql:mysql-connector-java:8.0.15,org.apache.hadoop:hadoop-aws:2.7.4,com.springml:spark-sftp_2.11:1.1.1" com/unilever/source_data_loading.py

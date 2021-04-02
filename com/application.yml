@@ -1,5 +1,5 @@
 source_data_list:
-  - OL
+  - CP
 SB:
   mysql_conf:
     dbtable: testdb.TRANSACTIONSYNC
@@ -11,6 +11,12 @@ OL:
     delimiter: "|"
     directory: /home/ubuntu/data/
     filename: receipts_delta_GBR_14_10_2017.csv
+
+CP:
+  s3_source_conf:
+    s3_bucket: chandraaws
+    sourcefile: KC_Extract_1_20171009.csv
+
 
 s3_conf:
   s3_bucket: chandraaws
