@@ -22,9 +22,11 @@ s3_conf:
   s3_bucket: chandraaws
   staging_dir : staging
 
+ADDR:
 mongodb_config:
-  database: school
-  collection: students
+  database: customers
+  collection: address
+
 
 redshift_conf:
   filetype: csv

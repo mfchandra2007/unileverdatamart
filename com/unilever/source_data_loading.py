@@ -2,7 +2,8 @@
 #Add a column 'ins_dt' -current_date()
 #Write a dataframe in s3 partitioned by ins-dt
 
-from pyspark.sql import SparkSession, functions
+from pyspark.sql import SparkSession
+from pyspark.sql import functions
 import os.path
 import yaml
 import utils.aws_utils as ut
@@ -13,14 +14,6 @@ if __name__ == '__main__':
     os.environ["PYSPARK_SUBMIT_ARGS"] = (
         '--packages "mysql:mysql-connector-java:8.0.15" pyspark-shell'
     )
-    # Create the SparkSession
-    spark = SparkSession \
-        .builder \
-        .appName("Read Files") \
-        .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4') \
-        .getOrCreate() \
-
-    spark.sparkContext.setLogLevel('ERROR')
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
     app_config_path = os.path.abspath(current_dir + "/../" + "application.yml")
@@ -30,6 +23,17 @@ if __name__ == '__main__':
     app_conf = yaml.load(conf, Loader=yaml.FullLoader)
     secret = open(app_secrets_path)
     app_secret = yaml.load(secret, Loader=yaml.FullLoader)
+
+    # Create the SparkSession
+    spark = SparkSession \
+            .builder \
+            .appName("Read Files") \
+            .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4') \
+            .config("spark.mongodb.input.uri", app_secret["mongodb_config"]["uri"]) \
+            .config("spark.mongodb.output.uri", app_secret["mongodb_config"]["uri"])\
+            .getOrCreate()
+
+    spark.sparkContext.setLogLevel('ERROR')
 
     src_list = app_conf["source_data_list"]
     print("app_secret:" + str(app_secret["mysql_conf"]["hostname"]))
@@ -46,6 +50,7 @@ if __name__ == '__main__':
                           "password": app_secret["mysql_conf"]["password"]
                           }
             print("\n jdbc_params :" + jdbc_params["url"])
+
             txn_df = spark \
                 .read.format("jdbc") \
                 .option("driver", "com.mysql.cj.jdbc.Driver") \
@@ -103,6 +108,29 @@ if __name__ == '__main__':
 
             print("\n Writing CP data to S3 <<")
 
+        elif src == "ADDR":
+            print("\nReading OL data from Mongo DB >>")
+            txn_df4 = spark \
+                .read \
+                .format("com.mongodb.spark.sql.DefaultSource") \
+                .option("database", src_conf["mongodb_config"]["database"]) \
+                .option("collection", src_conf["mongodb_config"]["collection"]) \
+                .load()
+
+            #txn_df4.show(5)
+
+            customer_df = txn_df4.select(functions.col('consumer_id'), functions.col('address.street').alias('Street'),
+                                          functions.col('address.city').alias('city'),
+                                          functions.col('address.state').alias('State'))
+
+            customer_df = customer_df.withColumn("ins_dt", functions.current_date())
+            customer_df.show()
+
+            customer_df.write \
+                .mode('overwrite') \
+                .partitionBy("INS_DT") \
+                .json("s3a://" + app_conf ["s3_conf"]["s3_bucket"] + "/staging/addr")
+            print('Writing to S3')
         # spark-submit --packages "mysql:mysql-connector-java:8.0.15,org.apache.hadoop:hadoop-aws:2.7.4,com.springml:spark-sftp_2.11:1.1.1" com/unilever/source_data_loading.py
         # spark-submit --packages "mysql:mysql-connector-java:8.0.15,org.apache.hadoop:hadoop-aws:2.7.4,com.springml:spark-sftp_2.11:1.1.1" com/unilever/source_data_loading.py
 
