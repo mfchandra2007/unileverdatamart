@@ -24,7 +24,7 @@ s3_conf:
 
 ADDR:
 mongodb_config:
-  database: customers
+  database: customer
   collection: address
 
 
