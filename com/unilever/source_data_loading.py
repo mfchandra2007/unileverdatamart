@@ -118,10 +118,13 @@ if __name__ == '__main__':
                 .load()
 
             txn_df4.show(5)
+            #_id | address | consumer_id | mobile - no
+            customer_df = txn_df4.select(functions.col('id'), functions.col('address.street').alias('Street'),
+                                         functions.col('address.city').alias('city'),
+                                         functions.col('address.state').alias('State'),
+                                         functions.col('consumer_id'),
+                                         functions.col('mobile-no'))
 
-            customer_df = txn_df4.select(functions.col('consumer_id'), functions.col('address.street').alias('Street'),
-                                          functions.col('address.city').alias('city'),
-                                          functions.col('address.state').alias('State'))
 
             customer_df = customer_df.withColumn("ins_dt", functions.current_date())
             customer_df.show()
