@@ -1,5 +1,5 @@
 source_data_list:
-  - CP
+  - ADDR
 SB:
   mysql_conf:
     dbtable: testdb.TRANSACTIONSYNC
