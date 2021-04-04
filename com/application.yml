@@ -18,15 +18,14 @@ CP:
     sourcefile: KC_Extract_1_20171009.csv
 
 
+ADDR:
+  mongodb_config:
+    database: customer
+     collection: address
+
 s3_conf:
   s3_bucket: chandraaws
   staging_dir : staging
-
-ADDR:
-mongodb_config:
-  database: customer
-  collection: address
-
 
 redshift_conf:
   filetype: csv
