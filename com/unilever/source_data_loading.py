@@ -117,7 +117,7 @@ if __name__ == '__main__':
                 .option("collection", src_conf["mongodb_config"]["collection"]) \
                 .load()
 
-            #txn_df4.show(5)
+            txn_df4.show(5)
 
             customer_df = txn_df4.select(functions.col('consumer_id'), functions.col('address.street').alias('Street'),
                                           functions.col('address.city').alias('city'),
