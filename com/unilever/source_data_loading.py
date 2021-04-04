@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
             txn_df4.show(5)
             #_id | address | consumer_id | mobile - no
-            customer_df = txn_df4.select(functions.col('id'), functions.col('address.street').alias('Street'),
+            customer_df = txn_df4.select(functions.col('_id'), functions.col('address.street').alias('Street'),
                                          functions.col('address.city').alias('city'),
                                          functions.col('address.state').alias('State'),
                                          functions.col('consumer_id'),
