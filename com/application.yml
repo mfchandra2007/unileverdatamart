@@ -21,7 +21,7 @@ CP:
 ADDR:
   mongodb_config:
     database: customer
-     collection: address
+    collection: address
 
 s3_conf:
   s3_bucket: chandraaws
