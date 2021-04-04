@@ -109,7 +109,7 @@ if __name__ == '__main__':
             print("\n Writing CP data to S3 <<")
 
         elif src == "ADDR":
-            print("\nReading OL data from Mongo DB >>")
+            print("\nReading customers data from Mongo DB >>")
             txn_df4 = spark \
                 .read \
                 .format("com.mongodb.spark.sql.DefaultSource") \
