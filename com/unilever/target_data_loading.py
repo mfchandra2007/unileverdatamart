@@ -12,7 +12,8 @@ import utils.aws_utils as ut
 if __name__ == '__main__':
 
     os.environ["PYSPARK_SUBMIT_ARGS"] = (
-        '--jars "https://s3.amazonaws.com/redshift-downloads/drivers/jdbc/1.2.36.1060/RedshiftJDBC42-no-awssdk-1.2.36.1060.jar"\
+        '--packages "mysql:mysql-connector-java:8.0.15" pyspark-shell'
+        '--jars "https://s3.amazonaws.com/redshift-downloads /drivers/jdbc/1.2.36.1060/RedshiftJDBC42-no-awssdk-1.2.36.1060.jar"\
          --packages "org.apache.spark:spark-avro_2.11:2.4.2,io.github.spark-redshift-community:spark-redshift_2.11:4.0.1,org.apache.hadoop:hadoop-aws:2.7.4" pyspark-shell'
     )
 
@@ -36,18 +37,20 @@ if __name__ == '__main__':
 
     spark.sparkContext.setLogLevel('ERROR')
 
-    src_list = app_conf["source_data_list"]
+    tgt_list = app_conf["target_data_list"]
     print("app_secret:" + str(app_secret["mysql_conf"]["hostname"]))
-    for src in src_list:
-        src_conf = app_conf[src]
-        if src == "CP":
-            print("\nReading CP data from Aws S3 >>")
-            txn_df3 = spark.read.option("header","true") \
-                      .option("delimiter","~") \
-                      .csv("s3a://" + app_conf["s3_conf"]["s3_bucket"] +
-                       "/staging/CP/INS_DT=2021-04-04/part-00000-c67d7351-8280-4bf3-a5c4-aa90f1f0feab.c000.csv") \
+    for tgt in tgt_list:
+        tgt_conf = app_conf[tgt]
+        if tgt == "REGIS_DIM":
+            src_list = tgt_conf['sourceTable']
+            for src in src_list:
+                print("\nReading CP data from Aws S3 >>")
+                txn_df3 = spark.read.option("header","true") \
+                          .option("delimiter","~") \
+                          .csv("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/" + src) \
 
             txn_df3.show(5)
+            txn_df3.createOrReplaceTempView(src)
 
 
 
