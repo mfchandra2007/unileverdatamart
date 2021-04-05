@@ -10,7 +10,7 @@ s3_conf:
 
 SB:
   mysql_conf:
-    dbtable: testdb.TRANSACTIONSYNC
+    dbtable: testdb1.TRANSACTIONSYNC
     partition_column: App_Transaction_Id
 
 OL:
