@@ -62,9 +62,7 @@ if __name__ == '__main__':
             txn_df.write \
                 .mode("overwrite") \
                 .partitionBy("INS_DT") \
-                .option("header","true") \
-                .option("delimiter", "~") \
-                .csv("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/SB")
+                .parquet("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/SB")
 
             print("\n Write SB data in S3 << ")
 
@@ -84,9 +82,7 @@ if __name__ == '__main__':
             txn_df2.write \
                 .mode('overwrite') \
                 .partitionBy("INS_DT") \
-                .option("header", "true") \
-                .option("delimiter", "~") \
-                .csv("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/OL")
+                .parquet("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/OL")
 
             print("\nWriting OL data to S3 <<")
 
@@ -102,9 +98,7 @@ if __name__ == '__main__':
             txn_df3.write \
                     .mode("overwrite") \
                     .partitionBy("INS_DT") \
-                    .option("header","true") \
-                    .option("delimiter", "~") \
-                    .csv("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/CP")
+                    .parquet("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/CP")
 
             print("\n Writing CP data to S3 <<")
 
@@ -132,7 +126,7 @@ if __name__ == '__main__':
             customer_df.write \
                 .mode('overwrite') \
                 .partitionBy("INS_DT") \
-                .json("s3a://" + app_conf ["s3_conf"]["s3_bucket"] + "/staging/addr")
+                .parquet("s3a://" + app_conf ["s3_conf"]["s3_bucket"] + "/staging/addr")
             print('Writing to S3')
         # spark-submit --packages "mysql:mysql-connector-java:8.0.15,org.apache.hadoop:hadoop-aws:2.7.4,com.springml:spark-sftp_2.11:1.1.1" com/unilever/source_data_loading.py
         # spark-submit --packages "mysql:mysql-connector-java:8.0.15,org.apache.hadoop:hadoop-aws:2.7.4,com.springml:spark-sftp_2.11:1.1.1" com/unilever/source_data_loading.py
