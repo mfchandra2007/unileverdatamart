@@ -1,5 +1,5 @@
 source_data_list:
-  - CP
+  - OL
 
 target_data_list:
   - REGIS_DIM
