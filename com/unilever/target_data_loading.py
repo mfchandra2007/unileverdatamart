@@ -47,7 +47,7 @@ if __name__ == '__main__':
                 print("\nReading CP data from Aws S3 >>")
                 txn_df3 = spark.read.option("header","true") \
                           .option("delimiter","~") \
-                          .csv("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/" + src) \
+                          .load("s3a://" + app_conf["s3_conf"]["s3_bucket"] + "/staging/" + src) \
 
             txn_df3.show(5)
             txn_df3.createOrReplaceTempView(src)
