@@ -1,5 +1,5 @@
 source_data_list:
-  - ADDR
+  - SB
 
 target_data_list:
   - REGIS_DIM
